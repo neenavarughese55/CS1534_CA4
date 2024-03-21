@@ -108,3 +108,18 @@ messageForm.addEventListener("submit", (e) => {
 socket.on("chat message", function (data) {
   addNewMessage({ user: data.nick, message: data.message });
 });
+
+inputField.addEventListener("keypress", () => {
+  socket.emit("typing", {nick: userName, typing: true})
+});
+inputField.addEventListener("blur", () => {
+  socket.emit("typing", {nick: userName, typing: false})
+});
+socket.on("typing status", function(data){
+  var user = document.querySelector(`.${data.nick}-userlist`);
+  if (data.typing){
+    user.innerHTML = `<h5>${data.nick} is typing</h5>`;
+  } else{
+    user.innerHTML= `<h5>${data.nick}</h5>`;
+  }
+});

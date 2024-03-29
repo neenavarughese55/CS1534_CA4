@@ -2,20 +2,30 @@
   background-color: #D8BFD8;
 }
 
+nav {
+  background-color: #691269;
+  color: white;
+  font-family: 'Times New Roman', Times, serif;
+}
+
 .square {
   height: 350px;
   background-color: #928bd4;
+  border-style: dashed;
+  border-color: white;
 }
 
 .heading {
   position:absolute;
-  height: 12%;
+  height: 15%;
   font-size: 60px;
-  color: #8B008B;
+  background-color: #691269;
   font-family:'Times New Roman', Times, serif;
   font-weight: bold;
   margin-top: 100px;
+  margin-left: 20px;
   padding: 20px;
+  color:#D8BFD8;
 }
 
 .down{
@@ -53,3 +63,12 @@
   margin: 20px;
 }
 
+.button-link {
+  display: block;
+  text-align: center;
+  padding: 10px 20px;
+  background-color: #691269;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: white;
+}

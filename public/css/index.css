@@ -3,9 +3,8 @@
 }
 
 nav {
-  background-color: #691269;
-  color: white;
   font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
 }
 
 .square {
@@ -61,6 +60,7 @@ nav {
   color: #691269;
   padding: 20px;
   margin: 20px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .button-link {
@@ -68,7 +68,6 @@ nav {
   text-align: center;
   padding: 10px 20px;
   background-color: #691269;
-  color: #fff;
-  border-radius: 4px;
-  text-decoration: white;
+  font-size: 40px;
+  font-family: 'Times New Roman', Times, serif;
 }

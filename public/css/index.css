@@ -59,8 +59,12 @@ nav {
   border-style: dashed;
   color: #691269;
   padding: 20px;
-  margin: 20px;
+  margin: 0.5px;
   font-family: 'Times New Roman', Times, serif;
+}
+
+.back-colour {
+  background-color: #bab3f9;
 }
 
 .button-link {

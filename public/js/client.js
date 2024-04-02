@@ -1,113 +1,124 @@
 //required for front end communication between client and server
-
 const socket = io();
 
 const inboxPeople = document.querySelector(".inbox__people");
-
-
-let userName = "";
-let id;
-const newUserConnected = function (data) {
-    
-
-    //give the user a random unique id
-    id = Math.floor(Math.random() * 1000000);
-    userName = 'user-' +id;
-    //console.log(typeof(userName));   
-    
-
-    //emit an event with the user id
-    socket.emit("new user", userName);
-    //call
-    addToUsersBox(userName);
-};
-
-const addToUsersBox = function (userName) {
-    //This if statement checks whether an element of the user-userlist
-    //exists and then inverts the result of the expression in the condition
-    //to true, while also casting from an object to boolean
-    if (!!document.querySelector(`.${userName}-userlist`)) {
-        return;
-    
-    }
-    
-    //setup the divs for displaying the connected users
-    //id is set to a string including the username
-    const userBox = `
-    <div class="chat_id ${userName}-userlist">
-      <h5>${userName}</h5>
-    </div>
-  `;
-    //set the inboxPeople div with the value of userbox
-    inboxPeople.innerHTML += userBox;
-};
-
-//call 
-newUserConnected();
-
-//when a new user event is detected
-socket.on("new user", function (data) {
-  data.map(function (user) {
-          return addToUsersBox(user);
-      });
-});
-
-
-
-
 const inputField = document.querySelector(".message_form__input");
 const messageForm = document.querySelector(".message_form");
 const messageBox = document.querySelector(".messages__history");
 
-//when a user leaves
+let userName = "";
+let id;
+
+const newUserConnected = function () {
+  id = Math.floor(Math.random() * 1000000);
+  userName = 'user-' + id;
+  socket.emit("new user", userName);
+};
+
+const addToUsersBox = function (userName) {
+  if (!document.querySelector(`.${userName}-userlist`)) {
+    const userBox = `
+      <div class="chat_id ${userName}-userlist">
+        <h5>${userName}</h5>
+      </div>
+    `;
+    inboxPeople.innerHTML += userBox;
+  }
+};
+
+const addUserTypingIndicator = function (userName) {
+  const typingStatus = document.querySelector(`.${userName}-typing`);
+  if (!typingStatus) {
+    const typingIndicator = `
+      <div class="${userName}-typing">
+        <p>${userName} is typing...</p>
+      </div>
+    `;
+    inboxPeople.innerHTML += typingIndicator;
+  }
+};
+
+const removeUserTypingIndicator = function (userName) {
+  const typingStatus = document.querySelector(`.${userName}-typing`);
+  if (typingStatus) {
+    typingStatus.remove();
+  }
+};
+
+socket.on("new user", function (data) {
+  data.forEach(function (user) {
+    addToUsersBox(user);
+  });
+});
+
+socket.on("user joined", function(data){
+  addToUsersBox(data);
+  const joinedMessage = `
+    <div class="message receiver joined">
+      <div class="message__content">${data} has joined</div>
+    </div>
+  `;
+  messageBox.innerHTML += joinedMessage;
+  messageBox.scrollTop = messageBox.scrollHeight;
+});
+
 socket.on("user disconnected", function (userName) {
   document.querySelector(`.${userName}-userlist`).remove();
-  const time = new Date();
-  const formattedTime = time.toLocaleString("en-US", { hour: "numeric", minute: "numeric" });
-  const receivedMsg = `
-  <div class="incoming__message">
-    <div class="received__message">
-      <p>${userName} has left</p>
-      <div class="message__info">
-        <span class="time_date">${formattedTime}</span>
-      </div>
+  const disconnectedMessage = `
+    <div class="message receiver left">
+      <div class="message__content">${userName} has left</div>
     </div>
-  </div>`;
-  messageBox.innerHTML += receivedMsg;
+  `;
+  messageBox.innerHTML += disconnectedMessage;
+  messageBox.scrollTop = messageBox.scrollHeight;
 });
+
+// Listen for user typing event and display typing status
+socket.on("user typing", function(userName) {
+  addUserTypingIndicator(userName);
+});
+
+// Listen for user stopped typing event and remove typing status
+socket.on("user stopped typing", function(userName) {
+  removeUserTypingIndicator(userName);
+});
+
+// Function to emit user typing event
+function userTyping() {
+  socket.emit("user typing", userName);
+}
+
+// Function to emit user stopped typing event
+function userStoppedTyping() {
+  socket.emit("user stopped typing", userName);
+}
 
 const addNewMessage = ({ user, message }) => {
   const time = new Date();
   const formattedTime = time.toLocaleString("en-US", { hour: "numeric", minute: "numeric" });
 
-  const receivedMsg = `
-  <div class="incoming__message">
-    <div class="received__message">
-      <p>${message}</p>
+  const messageHTML = `
+    <div class="message ${user === userName ? 'sender' : 'receiver'}">
+      <div class="message__content">${message}</div>
       <div class="message__info">
         <span class="message__author">${user}</span>
         <span class="time_date">${formattedTime}</span>
       </div>
     </div>
-  </div>`;
+  `;
 
-  const myMsg = `
-  <div class="outgoing__message">
-    <div class="sent__message">
-      <p>${message}</p>
-      <div class="message__info">
-        <span class="time_date">${formattedTime}</span>
-      </div>
-    </div>
-  </div>`;
-
-  //is the message sent or received
-  messageBox.innerHTML += user === userName ? myMsg : receivedMsg;
+  messageBox.innerHTML += messageHTML;
+  messageBox.scrollTop = messageBox.scrollHeight;
 };
 
 messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
   if (!inputField.value) {
+    return;
+  }
+
+  if (inputField.value.match(/<[^>]+>/g)){
+    alert("Can't send html");
     return;
   }
 
@@ -123,6 +134,9 @@ socket.on("chat message", function (data) {
   addNewMessage({ user: data.nick, message: data.message });
 });
 
+// Call newUserConnected to initialize the user when the page loads
+newUserConnected();
+
 inputField.addEventListener("keypress", () => {
   socket.emit("typing", {nick: userName, typing: true})
 });
@@ -137,3 +151,4 @@ socket.on("typing status", function(data){
     user.innerHTML= `<h5>${data.nick}</h5>`;
   }
 });
+

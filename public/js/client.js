@@ -26,25 +26,6 @@ const addToUsersBox = function (userName) {
   }
 };
 
-const addUserTypingIndicator = function (userName) {
-  const typingStatus = document.querySelector(`.${userName}-typing`);
-  if (!typingStatus) {
-    const typingIndicator = `
-      <div class="${userName}-typing">
-        <p>${userName} is typing...</p>
-      </div>
-    `;
-    inboxPeople.innerHTML += typingIndicator;
-  }
-};
-
-const removeUserTypingIndicator = function (userName) {
-  const typingStatus = document.querySelector(`.${userName}-typing`);
-  if (typingStatus) {
-    typingStatus.remove();
-  }
-};
-
 socket.on("new user", function (data) {
   data.forEach(function (user) {
     addToUsersBox(user);
@@ -54,9 +35,11 @@ socket.on("new user", function (data) {
 socket.on("user joined", function(data){
   addToUsersBox(data);
   const joinedMessage = `
+  <br>
     <div class="message receiver joined">
       <div class="message__content">${data} has joined</div>
     </div>
+  </br>
   `;
   messageBox.innerHTML += joinedMessage;
   messageBox.scrollTop = messageBox.scrollHeight;
@@ -65,39 +48,23 @@ socket.on("user joined", function(data){
 socket.on("user disconnected", function (userName) {
   document.querySelector(`.${userName}-userlist`).remove();
   const disconnectedMessage = `
+  <br>
     <div class="message receiver left">
       <div class="message__content">${userName} has left</div>
     </div>
+    <div></div>
+  </br>
   `;
   messageBox.innerHTML += disconnectedMessage;
   messageBox.scrollTop = messageBox.scrollHeight;
 });
-
-// Listen for user typing event and display typing status
-socket.on("user typing", function(userName) {
-  addUserTypingIndicator(userName);
-});
-
-// Listen for user stopped typing event and remove typing status
-socket.on("user stopped typing", function(userName) {
-  removeUserTypingIndicator(userName);
-});
-
-// Function to emit user typing event
-function userTyping() {
-  socket.emit("user typing", userName);
-}
-
-// Function to emit user stopped typing event
-function userStoppedTyping() {
-  socket.emit("user stopped typing", userName);
-}
 
 const addNewMessage = ({ user, message }) => {
   const time = new Date();
   const formattedTime = time.toLocaleString("en-US", { hour: "numeric", minute: "numeric" });
 
   const messageHTML = `
+  <br>
     <div class="message ${user === userName ? 'sender' : 'receiver'}">
       <div class="message__content">${message}</div>
       <div class="message__info">
@@ -105,6 +72,7 @@ const addNewMessage = ({ user, message }) => {
         <span class="time_date">${formattedTime}</span>
       </div>
     </div>
+  </br>
   `;
 
   messageBox.innerHTML += messageHTML;

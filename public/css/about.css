@@ -11,7 +11,7 @@
     height: 300px;
     background-color: #928bd4;
     border-style: dashed;
-    border-color: white;
+    border-color:#691269;
   }
   
   .heading {
@@ -46,4 +46,13 @@
 
   .gradient3 {
     background-color: #dad8ee;
+  }
+
+  .button-link {
+    display: block;
+    text-align: center;
+    padding: 10px 20px;
+    background-color: #691269;
+    font-size: 40px;
+    font-family: 'Times New Roman', Times, serif;
   }

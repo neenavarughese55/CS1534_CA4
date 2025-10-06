@@ -1,0 +1,72 @@
+
+nav {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+  }
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding-top: 100px;
+    color: #691269;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+
+  iframe {
+    width: 80%;
+    height: 400px;
+    margin: 20px auto;
+  }
+  
+  .game iframe {
+    width: 100%;
+    height: 500px;
+  }
+
+  .background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .game {
+    margin-top: 20px;
+  }
+
+  p {
+    font-size: 20px;
+  }
+  
+  h1 {
+    font-size: 36px;
+  }
+
+  #background {
+    background-color: #D8BFD8;
+  }

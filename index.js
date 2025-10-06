@@ -26,6 +26,7 @@ io.on("connection", function (socket) {
     activeUsers.add(data);
     //... is the the spread operator, adds to the set while retaining what was in there already
     io.emit("new user", [...activeUsers]);
+    io.emit("user joined", socket.userId);
   });
 
   socket.on("disconnect", function () {

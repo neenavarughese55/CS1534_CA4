@@ -1,0 +1,17 @@
+commit eea7d40cc643dd57430f6699a9700ac2bb93125a
+Author: NEENA VARUGHESE <n.varughese.23@abdn.ac.uk>
+Date:   Thu Mar 21 13:46:19 2024 +0000
+
+    Start
+
+commit e40ead6bcda477f7a031560244007caef80c47be
+Author: neenavarughese55 <u01nv23@abdn.ac.uk>
+Date:   Thu Mar 21 13:57:22 2024 +0000
+
+    testing
+
+commit f2c2efa908aaa9e9707c8db2c3ed759092bd5c32
+Author: neenavarughese55 <u01nv23@abdn.ac.uk>
+Date:   Thu Mar 21 14:58:06 2024 +0000
+
+    Displayed the typing status of the user.

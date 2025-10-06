@@ -63,7 +63,7 @@ const messageForm = document.querySelector(".message_form");
 const messageBox = document.querySelector(".messages__history");
 
 const addNewMessage = ({ user, message }) => {
-  const time = new Date();
+ const time = new Date();
   const formattedTime = time.toLocaleString("en-US", { hour: "numeric", minute: "numeric" });
 
   const receivedMsg = `
